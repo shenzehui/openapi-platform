@@ -1,0 +1,71 @@
+server:
+  port: 8090
+spring:
+  cloud:
+    gateway:
+      #      # 全局过滤器
+      #      default-filters:
+      #        - AddResponseHeader=X-Response-Default-Red, Default-Blue
+      #        - PrefixPath=/httpbin
+      routes:
+        - id: api_route
+          uri: http://localhost:8123
+          predicates:
+            - Path=/api/**
+      #        - id: after_route
+      #          uri: https://www.baidu.com
+      #          predicates:
+      #            - After=2023-01-20T17:42:47.789-07:00[America/Denver]
+      #        - id: before_route
+      #            uri: https://www.baidu.com
+      #            predicates:
+      #              - Before=2023-01-20T17:42:47.789-07:00[America/Denver]
+#        - id: szh-fallback
+#          uri: https://www.baidu.com
+#          predicates:
+#            - Path=/fallback
+#        - id: path_route
+#          uri: http://localhost:8123
+#          predicates:
+#            - Path=/api/**
+#          filters:
+#            - AddRequestHeader=szh,swage
+#            - AddRequestParameter=name,dog
+#            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin  # 去重
+#            - name: CircuitBreaker
+#              args:
+#                name: myCircuitBreaker
+#                fallbackUri: forward:/fallback
+#        - id: path_route
+#          uri: https://www.baidu.com
+#          predicates:
+#            - Path=/baidu/**
+
+#          权重
+#        - id: weight_high
+#          uri: https://weighthigh.org
+#          predicates:
+#            - Weight=group1, 8
+#        - id: weight_low
+#          uri: https://weightlow.org
+#          predicates:
+#            - Weight=group1, 2
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: trace
+dubbo:
+  application:
+    name: dubbo-api-platform-backend-provider
+    # https://www.cnblogs.com/Tpf386/p/16017623.html
+    qosEnable: true
+    qosPort: 33333
+    qosAcceptForeignIp: false
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://localhost:8848
